@@ -9,25 +9,42 @@ v0.1.0
  
     $.boxit = function(options) {
         var boxitOptions = $.extend({
-            action: 'init'
+            action: 'init',
+            instance: 'default'
         }, options);
         
         if (boxitOptions.action === 'init') {
             boxitInit(boxitOptions);
+        } else if (boxitOptions.action === 'open') {
+            boxitOpen(boxitOptions);
         }
     };
     
     function boxitInit(options) {
         var boxitWrap = $('<div />');
         boxitWrap.addClass('boxit-wrap');
+        boxitWrap.addClass('boxit-instance-' + options.instance);
+        boxitWrap.attr('data-boxit-instance', options.instance);
         
         var boxitBox = $('<div />');
         boxitBox.addClass('boxit-box');
         
-        boxitWrap.css('display', 'none');
-        
         boxitWrap.appendTo('body');
         boxitBox.appendTo(boxitWrap);
+    }
+    
+    function boxitOpen(options) {
+        var boxitWrap = $('.boxit-wrap[data-boxit-instance="' + options.instance + '"]');
+        var boxitBox = boxitWrap.children('.boxit-box');
+        var boxitBoxContents = $('[data-boxit-id="' + options.boxID + '"]');
+        
+        if (boxitBox.length > 0 && boxitBoxContents.length > 0) {
+            boxitBoxContents = boxitBoxContents.first();
+            
+            boxitBoxContents.clone().appendTo(boxitBox);
+            
+            boxitWrap.addClass('active');
+        }
     }
     
 }(jQuery));
