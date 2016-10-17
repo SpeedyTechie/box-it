@@ -1,0 +1,15 @@
+{
+  "name": "box-it",
+  "version": "0.1.0",
+  "description": "A jQuery dialog box plugin for all mankind.",
+  "main": "gulpfile.js",
+  "author": "Zane Harnish",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0"
+  }
+}
