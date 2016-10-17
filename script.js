@@ -24,10 +24,10 @@ v0.1.0
         var boxitBox = $('<div />');
         boxitBox.addClass('boxit-box');
         
+        boxitWrap.css('display', 'none');
+        
         boxitWrap.appendTo('body');
         boxitBox.appendTo(boxitWrap);
-        
-        boxitWrap.css('display', 'none');
     }
     
 }(jQuery));
