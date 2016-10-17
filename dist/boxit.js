@@ -17,6 +17,8 @@ v0.1.0
             boxitInit(boxitOptions);
         } else if (boxitOptions.action === 'open') {
             boxitOpen(boxitOptions);
+        } else if (boxitOptions.action == 'close') {
+            boxitClose(boxitOptions);
         }
     };
     
@@ -41,10 +43,15 @@ v0.1.0
         if (boxitBox.length > 0 && boxitBoxContents.length > 0) {
             boxitBoxContents = boxitBoxContents.first();
             
+            boxitBox.empty();
             boxitBoxContents.clone().appendTo(boxitBox);
             
             boxitWrap.addClass('active');
         }
+    }
+    
+    function boxitClose(options) {
+        $('.boxit-wrap').removeClass('active');
     }
     
 }(jQuery));
