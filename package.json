@@ -1,5 +1,5 @@
 {
-  "name": "box-it",
+  "name": "boxit",
   "version": "0.1.0",
   "description": "A jQuery dialog box plugin for all mankind.",
   "main": "gulpfile.js",

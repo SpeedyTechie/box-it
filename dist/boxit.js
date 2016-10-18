@@ -1,5 +1,5 @@
 /*
-box-it
+boxit
 v0.1.0
 */
 
