@@ -27,6 +27,11 @@ v0.1.0
         boxitWrap.addClass('boxit-wrap');
         boxitWrap.addClass('boxit-instance-' + options.instance);
         boxitWrap.attr('data-boxit-instance', options.instance);
+        boxitWrap.click(function(e) {
+            if($(e.target).is('.boxit-wrap')) {
+                boxitClose();
+            }
+        });
         
         var boxitBox = $('<div />');
         boxitBox.addClass('boxit-box');
