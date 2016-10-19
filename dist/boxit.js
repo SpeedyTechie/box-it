@@ -9,54 +9,71 @@ v0.1.0
  
     $.boxit = function(options) {
         var boxitOptions = $.extend({
-            action: 'init',
-            instance: 'default'
+            instance: 'default',
+            wrapClass: '',
+            boxClass: '',
+            closeButton: true,
+            closeButtonText: '&times;',
+            closeButtonClass: ''
         }, options);
         
-        if (boxitOptions.action === 'init') {
-            boxitInit(boxitOptions);
-        } else if (boxitOptions.action === 'open') {
-            boxitOpen(boxitOptions);
-        } else if (boxitOptions.action == 'close') {
-            boxitClose(boxitOptions);
+        if ($('[data-boxit-instance="' + boxitOptions.instance + '"]').length < 1) {
+            var boxitWrap = $('<div />');
+            boxitWrap.addClass('boxit-wrap');
+            boxitWrap.addClass('boxit-instance-' + boxitOptions.instance);
+            boxitWrap.addClass(boxitOptions.wrapClass);
+            boxitWrap.attr('data-boxit-instance', boxitOptions.instance);
+            boxitWrap.click(function(e) {
+                if($(e.target).is('.boxit-wrap')) {
+                    boxitWrap.boxit('close');
+                }
+            });
+            
+            var boxitBox = $('<div />');
+            boxitBox.addClass('boxit-box');
+            boxitBox.addClass(boxitOptions.boxClass);
+            boxitBox.attr('data-boxit-box', boxitOptions.instance);
+            
+            var closeButton = undefined;
+            if (boxitOptions.closeButton) {
+                closeButton = $('<button />');
+                closeButton.addClass('boxit-close');
+                closeButton.addClass(boxitOptions.closeButtonClass);
+                closeButton.attr('type', 'button');
+                closeButton.text(boxitOptions.closeButtonText);
+            }
+            
+            boxitWrap.appendTo('body');
+            boxitBox.appendTo(boxitWrap);
+            closeButton.appendTo(boxitBox);
+            
+            return boxitWrap;
+        } else {
+            return false;
         }
     };
     
-    function boxitInit(options) {
-        var boxitWrap = $('<div />');
-        boxitWrap.addClass('boxit-wrap');
-        boxitWrap.addClass('boxit-instance-' + options.instance);
-        boxitWrap.attr('data-boxit-instance', options.instance);
-        boxitWrap.click(function(e) {
-            if($(e.target).is('.boxit-wrap')) {
-                boxitClose();
+    $.fn.boxit = function(action, content) {
+        var boxitWrap = this;
+        if (boxitWrap.is('[data-boxit-instance]')) {
+            if (action === 'open') {
+                if (typeof content !== 'undefined') {
+                    var boxitBox = boxitWrap.children('[data-boxit-box]').first();
+                    var boxitContent = content;
+                    
+                    if (boxitBox.length === 1) {
+                        boxitContent = boxitContent.first();
+            
+                        boxitBox.empty();
+                        boxitBox.append(boxitContent.clone());
+
+                        boxitWrap.addClass('active');
+                    }
+                }
+            } else if (action === 'close') {
+                boxitWrap.removeClass('active');
             }
-        });
-        
-        var boxitBox = $('<div />');
-        boxitBox.addClass('boxit-box');
-        
-        boxitWrap.appendTo('body');
-        boxitBox.appendTo(boxitWrap);
-    }
-    
-    function boxitOpen(options) {
-        var boxitWrap = $('.boxit-wrap[data-boxit-instance="' + options.instance + '"]');
-        var boxitBox = boxitWrap.children('.boxit-box');
-        var boxitBoxContents = $('[data-boxit-id="' + options.boxID + '"]');
-        
-        if (boxitBox.length > 0 && boxitBoxContents.length > 0) {
-            boxitBoxContents = boxitBoxContents.first();
-            
-            boxitBox.empty();
-            boxitBoxContents.clone().appendTo(boxitBox);
-            
-            boxitWrap.addClass('active');
         }
-    }
-    
-    function boxitClose(options) {
-        $('.boxit-wrap').removeClass('active');
-    }
+    };
     
 }(jQuery));

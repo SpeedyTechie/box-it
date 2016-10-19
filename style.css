@@ -29,6 +29,7 @@ body {
     background-color: #fff;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 25px;
     transform: scale(0);
     transform-origin: center;
     transition: transform 0.4s;
