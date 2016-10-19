@@ -13,7 +13,7 @@ v0.1.0
             wrapClass: '',
             boxClass: '',
             closeButton: true,
-            closeButtonText: '\327',
+            closeButtonText: '×',
             closeButtonClass: ''
         }, options);
         
@@ -23,11 +23,17 @@ v0.1.0
             boxitWrap.addClass('boxit-instance-' + boxitOptions.instance);
             boxitWrap.addClass(boxitOptions.wrapClass);
             boxitWrap.attr('data-boxit-instance', boxitOptions.instance);
+            boxitWrap.click(function(e) {
+                if($(e.target).is($(this))) {
+                    boxitWrap.boxit('close');
+                }
+            });
             
             var boxitBox = $('<div />');
             boxitBox.addClass('boxit-box');
             boxitBox.addClass(boxitOptions.boxClass);
             boxitBox.attr('data-boxit-box', boxitOptions.instance);
+            boxitBox.appendTo(boxitWrap);
             
             var boxitClose = undefined;
             if (boxitOptions.closeButton) {
@@ -35,16 +41,21 @@ v0.1.0
                 boxitClose.addClass('boxit-close');
                 boxitClose.addClass(boxitOptions.closeButtonClass);
                 boxitClose.attr('type', 'button');
+                boxitClose.attr('title', 'Close');
                 boxitClose.attr('data-boxit-close', boxitOptions.instance);
                 boxitClose.text(boxitOptions.closeButtonText);
+                boxitClose.appendTo(boxitBox);
+                boxitClose.click(function() {
+                    boxitWrap.boxit('close');
+                });
             }
             
-            boxitWrap.appendTo('body');
-            boxitBox.appendTo(boxitWrap);
-            boxitClose.appendTo(boxitBox);
+            boxitWrap.prependTo('body');
             
-            boxitWrap.add(boxitClose).click(function(e) {
-                if($(e.target).is($(this))) {
+            $(document).keydown(function(e) {
+                if (e.key === 'Escape' || e.key === 'Esc') {
+                    boxitWrap.boxit('close');
+                } else if (e.keyCode === 27) {
                     boxitWrap.boxit('close');
                 }
             });
@@ -79,6 +90,8 @@ v0.1.0
                 boxitWrap.removeClass('active');
             }
         }
+        
+        return boxitWrap;
     };
     
 }(jQuery));

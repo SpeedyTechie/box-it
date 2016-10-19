@@ -41,12 +41,24 @@ v0.1.0
                 boxitClose.addClass('boxit-close');
                 boxitClose.addClass(boxitOptions.closeButtonClass);
                 boxitClose.attr('type', 'button');
+                boxitClose.attr('title', 'Close');
                 boxitClose.attr('data-boxit-close', boxitOptions.instance);
                 boxitClose.text(boxitOptions.closeButtonText);
                 boxitClose.appendTo(boxitBox);
+                boxitClose.click(function() {
+                    boxitWrap.boxit('close');
+                });
             }
             
-            boxitWrap.appendTo('body');
+            boxitWrap.prependTo('body');
+            
+            $(document).keydown(function(e) {
+                if (e.key === 'Escape' || e.key === 'Esc') {
+                    boxitWrap.boxit('close');
+                } else if (e.keyCode === 27) {
+                    boxitWrap.boxit('close');
+                }
+            });
             
             return boxitWrap;
         } else {
@@ -69,9 +81,6 @@ v0.1.0
                         boxitClose.detach();
                         boxitBox.empty();
                         boxitBox.append(boxitClose);
-                        boxitClose.click(function() {
-                            boxitWrap.boxit('close');
-                        });
                         boxitBox.append(boxitContent.clone());
 
                         boxitWrap.addClass('active');
