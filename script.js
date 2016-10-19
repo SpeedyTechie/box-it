@@ -13,7 +13,7 @@ v0.1.0
             wrapClass: '',
             boxClass: '',
             closeButton: true,
-            closeButtonText: '&times;',
+            closeButtonText: '×',
             closeButtonClass: ''
         }, options);
         
@@ -24,7 +24,7 @@ v0.1.0
             boxitWrap.addClass(boxitOptions.wrapClass);
             boxitWrap.attr('data-boxit-instance', boxitOptions.instance);
             boxitWrap.click(function(e) {
-                if($(e.target).is('.boxit-wrap')) {
+                if($(e.target).is($(this))) {
                     boxitWrap.boxit('close');
                 }
             });
@@ -33,19 +33,20 @@ v0.1.0
             boxitBox.addClass('boxit-box');
             boxitBox.addClass(boxitOptions.boxClass);
             boxitBox.attr('data-boxit-box', boxitOptions.instance);
+            boxitBox.appendTo(boxitWrap);
             
-            var closeButton = undefined;
+            var boxitClose = undefined;
             if (boxitOptions.closeButton) {
-                closeButton = $('<button />');
-                closeButton.addClass('boxit-close');
-                closeButton.addClass(boxitOptions.closeButtonClass);
-                closeButton.attr('type', 'button');
-                closeButton.text(boxitOptions.closeButtonText);
+                boxitClose = $('<button />');
+                boxitClose.addClass('boxit-close');
+                boxitClose.addClass(boxitOptions.closeButtonClass);
+                boxitClose.attr('type', 'button');
+                boxitClose.attr('data-boxit-close', boxitOptions.instance);
+                boxitClose.text(boxitOptions.closeButtonText);
+                boxitClose.appendTo(boxitBox);
             }
             
             boxitWrap.appendTo('body');
-            boxitBox.appendTo(boxitWrap);
-            closeButton.appendTo(boxitBox);
             
             return boxitWrap;
         } else {
@@ -59,12 +60,18 @@ v0.1.0
             if (action === 'open') {
                 if (typeof content !== 'undefined') {
                     var boxitBox = boxitWrap.children('[data-boxit-box]').first();
+                    var boxitClose = boxitBox.children('[data-boxit-close]').first();
                     var boxitContent = content;
                     
                     if (boxitBox.length === 1) {
                         boxitContent = boxitContent.first();
-            
+                        
+                        boxitClose.detach();
                         boxitBox.empty();
+                        boxitBox.append(boxitClose);
+                        boxitClose.click(function() {
+                            boxitWrap.boxit('close');
+                        });
                         boxitBox.append(boxitContent.clone());
 
                         boxitWrap.addClass('active');
@@ -74,6 +81,8 @@ v0.1.0
                 boxitWrap.removeClass('active');
             }
         }
+        
+        return boxitWrap;
     };
     
 }(jQuery));

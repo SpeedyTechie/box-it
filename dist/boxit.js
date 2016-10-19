@@ -13,7 +13,7 @@ v0.1.0
             wrapClass: '',
             boxClass: '',
             closeButton: true,
-            closeButtonText: '&times;',
+            closeButtonText: '\327',
             closeButtonClass: ''
         }, options);
         
@@ -23,29 +23,31 @@ v0.1.0
             boxitWrap.addClass('boxit-instance-' + boxitOptions.instance);
             boxitWrap.addClass(boxitOptions.wrapClass);
             boxitWrap.attr('data-boxit-instance', boxitOptions.instance);
-            boxitWrap.click(function(e) {
-                if($(e.target).is('.boxit-wrap')) {
-                    boxitWrap.boxit('close');
-                }
-            });
             
             var boxitBox = $('<div />');
             boxitBox.addClass('boxit-box');
             boxitBox.addClass(boxitOptions.boxClass);
             boxitBox.attr('data-boxit-box', boxitOptions.instance);
             
-            var closeButton = undefined;
+            var boxitClose = undefined;
             if (boxitOptions.closeButton) {
-                closeButton = $('<button />');
-                closeButton.addClass('boxit-close');
-                closeButton.addClass(boxitOptions.closeButtonClass);
-                closeButton.attr('type', 'button');
-                closeButton.text(boxitOptions.closeButtonText);
+                boxitClose = $('<button />');
+                boxitClose.addClass('boxit-close');
+                boxitClose.addClass(boxitOptions.closeButtonClass);
+                boxitClose.attr('type', 'button');
+                boxitClose.attr('data-boxit-close', boxitOptions.instance);
+                boxitClose.text(boxitOptions.closeButtonText);
             }
             
             boxitWrap.appendTo('body');
             boxitBox.appendTo(boxitWrap);
-            closeButton.appendTo(boxitBox);
+            boxitClose.appendTo(boxitBox);
+            
+            boxitWrap.add(boxitClose).click(function(e) {
+                if($(e.target).is($(this))) {
+                    boxitWrap.boxit('close');
+                }
+            });
             
             return boxitWrap;
         } else {
@@ -59,12 +61,15 @@ v0.1.0
             if (action === 'open') {
                 if (typeof content !== 'undefined') {
                     var boxitBox = boxitWrap.children('[data-boxit-box]').first();
+                    var boxitClose = boxitBox.children('[data-boxit-close]').first();
                     var boxitContent = content;
                     
                     if (boxitBox.length === 1) {
                         boxitContent = boxitContent.first();
-            
+                        
+                        boxitClose.detach();
                         boxitBox.empty();
+                        boxitBox.append(boxitClose);
                         boxitBox.append(boxitContent.clone());
 
                         boxitWrap.addClass('active');

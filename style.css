@@ -27,9 +27,10 @@ body {
 }
 .boxit-box {
     background-color: #fff;
+    position: relative;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 25px;
+    padding: 50px;
     transform: scale(0);
     transform-origin: center;
     transition: transform 0.4s;
@@ -37,4 +38,16 @@ body {
 .boxit-wrap.active .boxit-box {
     transform: scale(1);
     transition: transform 0.3s 0.1s;
+}
+.boxit-close {
+    background-color: transparent;
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    padding: 0 7px;
+    font-size: 24px;
+    text-shadow: none;
+    border: 0;
+    cursor: pointer;
+    box-shadow: none;
 }
