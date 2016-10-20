@@ -75,6 +75,20 @@ v0.1.0
                 }
             });
             
+            if (!$(document).data('boxit')) {
+                function bodyFullHeight() {
+                    $('body').css('padding-bottom', '0');
+                    var windowHeight = $(window).innerHeight();
+                    var bodyHeight = $('body').height();
+                    if (bodyHeight < windowHeight) {
+                        $('body').css('padding-bottom', (windowHeight - bodyHeight) + 'px');
+                    }
+                }
+                bodyFullHeight();
+                $(window).resize(bodyFullHeight);
+            }
+            
+            $(document).data('boxit', true);
             return boxitWrap;
         }
         
@@ -100,16 +114,22 @@ v0.1.0
                             boxitBox.append(boxitClose);
                             boxitBox.append(boxitContent.clone());
                             
-                            var boxitStyle = $('<style>*, *::before, *::after { transition: 0s !important; }</style>');
+                            var boxitStyle = $('<style>.boxit-wrap *, .boxit-wrap *::before, .boxit-wrap *::after { transition: 0s !important; }</style>');
                             boxitWrap.addClass('boxit-test');
                             boxitStyle.appendTo('head');
                             boxitWrap.addClass('active');
-                            boxitBox.css('margin', '');
+                            boxitBox.css('margin-top', '');
+                            var windowHeight = $(window).innerHeight();
+                            var windowTop = $(window).scrollTop();
                             var boxitWrapHeight = boxitWrap.height();
                             var boxitBoxHeight = boxitBox.outerHeight();
-                            if (boxitWrapHeight >= boxitBoxHeight) {
-                                boxitBox.css('margin', ((boxitWrapHeight - boxitBoxHeight) / 2) + 'px auto');
+                            var margin = boxitWrapHeight - boxitBoxHeight;
+                            if (boxitBoxHeight < windowHeight - 100) {
+                                margin = Math.min(margin, ((windowHeight - boxitBoxHeight) / 2) + windowTop - 50);
+                            } else {
+                                margin = Math.min(margin, windowTop);
                             }
+                            boxitBox.css('margin-top', margin + 'px');
                             boxitWrap.removeClass('active');
                             boxitStyle.remove();
                             boxitWrap.removeClass('boxit-test');
