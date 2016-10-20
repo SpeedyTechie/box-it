@@ -33,6 +33,7 @@ v0.1.0
             boxitBox.addClass('boxit-box');
             boxitBox.addClass(boxitOptions.boxClass);
             boxitBox.attr('data-boxit-box', boxitOptions.instance);
+            boxitBox.attr('tabindex', '-1');
             boxitBox.appendTo(boxitWrap);
             
             var boxitClose = undefined;
@@ -44,11 +45,25 @@ v0.1.0
                 boxitClose.attr('title', 'Close');
                 boxitClose.attr('data-boxit-close', boxitOptions.instance);
                 boxitClose.text(boxitOptions.closeButtonText);
-                boxitClose.appendTo(boxitBox);
                 boxitClose.click(function() {
                     boxitWrap.boxit('close');
                 });
+                boxitClose.appendTo(boxitBox);
             }
+            
+            var boxitFocusEnd = $('<div />');
+            boxitFocusEnd.css('opacity', '0');
+            boxitFocusEnd.css('position', 'absolute');
+            boxitFocusEnd.css('z-index', '-999999');
+            boxitFocusEnd.css('width', '0');
+            boxitFocusEnd.css('height', '0');
+            boxitFocusEnd.css('overflow', 'hidden');
+            boxitFocusEnd.attr('tabindex', '0');
+            boxitFocusEnd.focus(function() {
+                boxitBox.focus();
+                return false;
+            });
+            boxitFocusEnd.appendTo(boxitWrap);
             
             boxitWrap.prependTo('body');
             
@@ -61,13 +76,14 @@ v0.1.0
             });
             
             return boxitWrap;
-        } else {
-            return false;
         }
+        
+        return false;
     };
     
     $.fn.boxit = function(action, content) {
         var boxitWrap = this;
+        
         if (boxitWrap.is('[data-boxit-instance]')) {
             if (action === 'open') {
                 if (typeof content !== 'undefined') {
@@ -84,14 +100,22 @@ v0.1.0
                         boxitBox.append(boxitContent.clone());
 
                         boxitWrap.addClass('active');
+                        
+                        boxitWrap.data('lastFocus', $(document.activeElement));
+                        boxitBox.focus();
                     }
                 }
             } else if (action === 'close') {
                 boxitWrap.removeClass('active');
+                boxitWrap.data('lastFocus').focus();
+            } else if (action === 'isOpen') {
+                return boxitWrap.hasClass('active');
             }
+            
+            return boxitWrap;
         }
         
-        return boxitWrap;
+        return false;
     };
     
 }(jQuery));
