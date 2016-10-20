@@ -99,8 +99,22 @@ v0.1.0
                             boxitBox.empty();
                             boxitBox.append(boxitClose);
                             boxitBox.append(boxitContent.clone());
-
+                            
+                            var boxitStyle = $('<style>*, *::before, *::after { transition: 0s !important; }</style>');
+                            boxitWrap.addClass('boxit-test');
+                            boxitStyle.appendTo('head');
                             boxitWrap.addClass('active');
+                            boxitBox.css('margin', '');
+                            var boxitWrapHeight = boxitWrap.height();
+                            var boxitBoxHeight = boxitBox.outerHeight();
+                            if (boxitWrapHeight >= boxitBoxHeight) {
+                                boxitBox.css('margin', ((boxitWrapHeight - boxitBoxHeight) / 2) + 'px auto');
+                            }
+                            boxitWrap.removeClass('active');
+                            boxitStyle.remove();
+                            boxitWrap.removeClass('boxit-test');
+
+                            boxitWrap.addClass('boxit-active');
 
                             boxitWrap.data('lastFocus', $(document.activeElement));
                             boxitBox.focus();
@@ -108,10 +122,10 @@ v0.1.0
                     }
                 }
             } else if (action === 'close') {
-                boxitWrap.removeClass('active');
+                boxitWrap.removeClass('boxit-active');
                 boxitWrap.data('lastFocus').focus();
             } else if (action === 'isOpen') {
-                return boxitWrap.hasClass('active');
+                return boxitWrap.hasClass('boxit-active');
             }
             
             return boxitWrap;
