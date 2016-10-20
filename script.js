@@ -87,22 +87,24 @@ v0.1.0
         if (boxitWrap.is('[data-boxit-instance]')) {
             if (action === 'open') {
                 if (typeof content !== 'undefined') {
-                    var boxitBox = boxitWrap.children('[data-boxit-box]').first();
-                    var boxitClose = boxitBox.children('[data-boxit-close]').first();
-                    var boxitContent = content;
-                    
-                    if (boxitBox.length === 1) {
-                        boxitContent = boxitContent.first();
-                        
-                        boxitClose.detach();
-                        boxitBox.empty();
-                        boxitBox.append(boxitClose);
-                        boxitBox.append(boxitContent.clone());
+                    if (!boxitWrap.boxit('isOpen')) {
+                        var boxitBox = boxitWrap.children('[data-boxit-box]').first();
+                        var boxitClose = boxitBox.children('[data-boxit-close]').first();
+                        var boxitContent = content;
 
-                        boxitWrap.addClass('active');
-                        
-                        boxitWrap.data('lastFocus', $(document.activeElement));
-                        boxitBox.focus();
+                        if (boxitBox.length === 1) {
+                            boxitContent = boxitContent.first();
+
+                            boxitClose.detach();
+                            boxitBox.empty();
+                            boxitBox.append(boxitClose);
+                            boxitBox.append(boxitContent.clone());
+
+                            boxitWrap.addClass('active');
+
+                            boxitWrap.data('lastFocus', $(document.activeElement));
+                            boxitBox.focus();
+                        }
                     }
                 }
             } else if (action === 'close') {
