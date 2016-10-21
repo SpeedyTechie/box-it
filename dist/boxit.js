@@ -75,19 +75,6 @@ v0.1.0
                 }
             });
             
-            if (!$(document).data('boxit')) {
-                function bodyFullHeight() {
-                    $('body').css('padding-bottom', '0');
-                    var windowHeight = $(window).innerHeight();
-                    var bodyHeight = $('body').height();
-                    if (bodyHeight < windowHeight) {
-                        $('body').css('padding-bottom', (windowHeight - bodyHeight) + 'px');
-                    }
-                }
-                bodyFullHeight();
-                $(window).resize(bodyFullHeight);
-            }
-            
             $(document).data('boxit', true);
             return boxitWrap;
         }
