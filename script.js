@@ -109,10 +109,11 @@ v0.1.0
                             var windowHeight = $(window).innerHeight();
                             var windowTop = $(window).scrollTop();
                             var boxitWrapHeight = boxitWrap.height();
+                            var boxitWrapExtra = boxitWrap.outerHeight(true) - boxitWrapHeight;
                             var boxitBoxHeight = boxitBox.outerHeight();
                             var margin = boxitWrapHeight - boxitBoxHeight;
-                            if (boxitBoxHeight < windowHeight - 100) {
-                                margin = Math.min(margin, ((windowHeight - boxitBoxHeight) / 2) + windowTop - 50);
+                            if (boxitBoxHeight < windowHeight - boxitWrapExtra) {
+                                margin = Math.min(margin, ((windowHeight - boxitBoxHeight) / 2) + windowTop - (boxitWrapExtra / 2));
                             } else {
                                 margin = Math.min(margin, windowTop);
                             }
